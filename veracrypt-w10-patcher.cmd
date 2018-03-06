@@ -15,13 +15,13 @@ echo.
 echo Some commands done by this script will display error messages.
 echo This is normal behavior and will be handled by the script.
 echo =============================================================================
-echo Windows 10 Medien Parcher zum Upgraden von VeraCrypt verschlsselten Systemen
+echo Windows 10 Medien Parcher zum Upgraden von VeraCrypt verschlÂsselten Systemen
 echo.
 echo Dieses Script bereitet ein Windows 10 Installationsmedium vor um
-echo VeraCrypt verschlsselte Windows 10 Systeme upzugraden, ohne dass diese 
-echo entschlsselt werden mssen.
+echo VeraCrypt verschlÂsselte Windows 10 Systeme upzugraden, ohne dass diese 
+echo entschlÂsselt werden mÂssen.
 echo.
-echo Einige Befehle, die von diesem Script ausgefhrt werden, zeigen
+echo Einige Befehle, die von diesem Script ausgefÂhrt werden, zeigen
 echo Fehlermeldungen an. Das ist normales Verhalten und wird vom Script behandelt.
 echo =============================================================================
 echo.
@@ -34,9 +34,9 @@ if not "%errorlevel%" == "0" (
 	echo Open the context-menu ^(usually right-click^) for this script
 	echo and select "Run as Administrator".
 	echo ===================================================================
-	echo Dieses Script ben”tigt Administratorrechte um zu funktionieren.
-	echo ™ffne das Kontextmen ^(blicherweise Rechtsklick^) fr dieses Script
-	echo und w„hle "Als Administrator ausfhren".
+	echo Dieses Script benâ€tigt Administratorrechte um zu funktionieren.
+	echo â„¢ffne das KontextmenÂ ^(Âblicherweise Rechtsklick^) fÂr dieses Script
+	echo und wâ€žhle "Als Administrator ausfÂhren".
 	echo ===================================================================
 	echo.
 	pause
@@ -50,21 +50,21 @@ if not exist %SystemRoot%\System32\drivers\veracrypt.sys (
 	echo ^(%SystemRoot%\System32\drivers\veracrypt.sys does not exist.^)
 	echo This preparation must be done on a machine where VeraCrypt is installed.
 	echo ========================================================================
-	echo Es scheint als w„hre VeraCrypt nicht auf dieser Maschine installiert.
+	echo Es scheint als wâ€žhre VeraCrypt nicht auf dieser Maschine installiert.
 	echo ^(%SystemRoot%\System32\drivers\veracrypt.sys existiert nicht.^)
 	echo Diese Vorbereitung muss auf einer Maschine mit installiertem VeraCrypt
-	echo durchgefhrt werden.
+	echo durchgefÂhrt werden.
 	echo ========================================================================
 	echo.
 	pause
 	goto :eof
 )
 
-if exist sources\install.esd (
+if exist c:\win-patch\sources\install.esd (
 	call :convert
 )
 
-if exist sources\install.wim (
+if exist c:\win-patch\sources\install.wim (
 
 	call :patch
 
@@ -74,7 +74,7 @@ if exist sources\install.wim (
 	echo Start the Windows 10 upgrade by executing setup.exe manually.
 	echo ======================================================================
 	echo Vorbereitungen abgeschlossen.
-	echo Starte das Windows 10 Upgrade durch manuelles ausfhren der setup.exe.
+	echo Starte das Windows 10 Upgrade durch manuelles ausfÂhren der setup.exe.
 	echo ======================================================================
 	echo.
 ) else (
@@ -91,7 +91,7 @@ if exist sources\install.wim (
 	echo Ist dieses Script im richtigen Verzeichnis abgelegt?
 	echo Es ist vorgesehen das es im Wurzelverzeichnis eines Windows 10 
 	echo Installationsmediums abgelegt ist und erwartet einen "sources" Verzeichnis
-	echo welches eine install.wim oder install.esd enth„lt.
+	echo welches eine install.wim oder install.esd enthâ€žlt.
 	echo ==========================================================================
 	echo.
 )
@@ -111,21 +111,21 @@ goto :eof
 	echo ===========================================
 	echo.
 
-	mkdir mounted-install-wim
-	mkdir mounted-winre-wim
+	mkdir c:\win-patch\mounted-install-wim
+	mkdir c:\win-patch\mounted-winre-wim
 
 	set imageIndex=0
 	:loopImagesPatch
 	set /a imageIndex=imageIndex+1 >NUL
-	DISM.exe /Mount-Wim /WimFile:sources\install.wim /index:%imageIndex% /MountDir:mounted-install-wim
+	DISM.exe /Mount-Wim /WimFile:c:\win-patch\sources\install.wim /index:%imageIndex% /MountDir:c:\win-patch\mounted-install-wim
 	if not "%errorlevel%" == "0" goto loopImagesPatchEnd
-	DISM.exe /Mount-Wim /WimFile:mounted-install-wim\Windows\System32\Recovery\winre.wim /index:1 /MountDir:mounted-winre-wim
+	DISM.exe /Mount-Wim /WimFile:c:\win-patch\mounted-install-wim\Windows\System32\Recovery\winre.wim /index:1 /MountDir:c:\win-patch\mounted-winre-wim
 	
-	copy %SystemRoot%\System32\drivers\veracrypt.sys mounted-install-wim\Windows\System32\drivers\veracrypt.sys
-	copy %SystemRoot%\System32\drivers\veracrypt.sys mounted-winre-wim\Windows\System32\drivers\veracrypt.sys
+	copy %SystemRoot%\System32\drivers\veracrypt.sys c:\win-patch\mounted-install-wim\Windows\System32\drivers\veracrypt.sys
+	copy %SystemRoot%\System32\drivers\veracrypt.sys c:\win-patch\mounted-winre-wim\Windows\System32\drivers\veracrypt.sys
 
-	Reg LOAD HKLM\mounted-install-wim mounted-install-wim\Windows\System32\config\SYSTEM
-	Reg LOAD HKLM\mounted-winre-wim mounted-winre-wim\Windows\System32\config\SYSTEM
+	Reg LOAD HKLM\mounted-install-wim c:\win-patch\mounted-install-wim\Windows\System32\config\SYSTEM
+	Reg LOAD HKLM\mounted-winre-wim c:\win-patch\mounted-winre-wim\Windows\System32\config\SYSTEM
 
 	Reg ADD HKLM\mounted-install-wim\ControlSet001\Services\veracrypt /f
 	Reg ADD HKLM\mounted-install-wim\ControlSet001\Services\veracrypt /f /v Type /t REG_DWORD /d 1
@@ -152,13 +152,13 @@ goto :eof
 	Reg UNLOAD HKLM\mounted-install-wim
 	Reg UNLOAD HKLM\mounted-winre-wim
 	
-	DISM.exe /Unmount-Wim /MountDir:mounted-winre-wim /commit
-	DISM.exe /Unmount-Wim /MountDir:mounted-install-wim /commit
+	DISM.exe /Unmount-Wim /MountDir:c:\win-patch\mounted-winre-wim /commit
+	DISM.exe /Unmount-Wim /MountDir:c:\win-patch\mounted-install-wim /commit
 	goto loopImagesPatch
 	:loopImagesPatchEnd
 	
-	rmdir mounted-install-wim
-	rmdir mounted-winre-wim
+	rmdir c:\win-patch\mounted-install-wim
+	rmdir c:\win-patch\mounted-winre-wim
 	
 	echo.
 	echo ====================
@@ -183,11 +183,11 @@ goto :eof
 	set imageIndex=0
 	:loopImagesConvert
 	set /a imageIndex=imageIndex+1 >NUL
-	DISM.exe /Export-Image /SourceImageFile:sources\install.esd /SourceIndex:%imageIndex% /DestinationImageFile:sources\install.wim /Compress:max /CheckIntegrity
+	DISM.exe /Export-Image /SourceImageFile:c:\win-patch\sources\install.esd /SourceIndex:%imageIndex% /DestinationImageFile:c:\win-patch\sources\install.wim /Compress:max /CheckIntegrity
 	if not "%errorlevel%" == "0" goto loopImagesConvertEnd
 	goto loopImagesConvert
 	:loopImagesConvertEnd
-	del sources\install.esd
+	del c:\win-patch\sources\install.esd
 	
 	echo.
 	echo ====================
